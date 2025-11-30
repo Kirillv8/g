@@ -1,12 +1,10 @@
-import Button from "../src/shared/ui/Button/Button.jsx";
-import Input from "./shared/ui/Input/Input.jsx";
+import PredictGenderForm from "./features/predict-gender-by-name/Predict-gender-form";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <Button />
-      <Input />
+      <PredictGenderForm />
     </>
   );
 }
