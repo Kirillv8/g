@@ -1,33 +1,64 @@
 import Input from "../../shared/ui/Input/Input";
 import Button from "../../shared/ui/Button/Button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getGenderByName } from "../../shared/api/getGenderByName.js";
+
+const DEBOUNCE_DELAY = 1000;
 
 const PredictGenderForm = () => {
   const [name, setName] = useState("");
   const [showGender, setShowGender] = useState(null);
+  const [pendingName, setPendingName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const timerRef = useRef(null);
+
+  const handleInputChange = (e) => {
+    setName(e.target.value);
+
+    clearTimeout(timerRef.current);
+
+    timerRef.current = setTimeout(() => {
+      setPendingName(e.target.value);
+    }, DEBOUNCE_DELAY);
+  };
 
   useEffect(() => {
-    const fetchData = async (name) => {
-      let resData = await getGenderByName(name);
-      setShowGender(resData);
+    if (!pendingName) return;
+
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        let resData = await getGenderByName(pendingName);
+
+        if (!resData) {
+          throw new Error(status);
+        }
+        setShowGender(resData);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
-    fetchData(name);
-  }, [name]);
+    fetchData();
+  }, [pendingName]);
 
   return (
     <div>
       <Input
         type="text"
-        placeholder="inter your name"
+        placeholder="enter your name"
         value={name}
-        onChange={(e) => {
-          console.log(e.target.value);
-          setName(e.target.value);
-        }}
+        onChange={handleInputChange}
       />
-      <Button></Button>
-      {showGender && <p>{`Your gender is ${showGender}`}</p>}
+      <Button isLoading={isLoading} />
+      {showGender && (
+        <p>
+          {`Your gender is `}
+          <strong>{showGender}</strong>
+          {` (Name: ${pendingName})`}
+        </p>
+      )}
     </div>
   );
 };
