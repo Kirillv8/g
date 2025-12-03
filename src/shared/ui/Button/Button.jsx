@@ -1,9 +1,9 @@
 import "./button.css";
-const Button = ({ ...props }, isLoading = false) => {
+const Button = ({ isLoading, ...props }) => {
   return (
     <>
       <button className="btn" {...props} disabled={isLoading}>
-        {isLoading && "Загрузка"}
+        {isLoading ? "Загрузка" : "Отправить"}
       </button>
     </>
   );
