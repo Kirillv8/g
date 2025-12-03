@@ -44,7 +44,7 @@ const PredictGenderForm = () => {
   }, [pendingName]);
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
       <Input
         type="text"
         placeholder="enter your name"
