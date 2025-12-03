@@ -1,10 +1,10 @@
-import PredictGenderForm from "./features/predict-gender-by-name/Predict-gender-form";
+import HomePage from "./pages/HomePages/HomePage";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <PredictGenderForm />
+      <HomePage />
     </>
   );
 }
